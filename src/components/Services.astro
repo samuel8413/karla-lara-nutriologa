@@ -1,0 +1,158 @@
+---
+import Icon from './Icon.astro';
+import { services, whatsappLink } from '../data/site';
+
+const tones = ['teal', 'rose', 'lilac'] as const;
+---
+
+<section class="section" id="servicios" aria-labelledby="servicios-title">
+  <div class="container">
+    <header class="section-header section-header--center">
+      <p class="eyebrow">Servicios</p>
+      <h2 id="servicios-title">Consultas para cada etapa y necesidad</h2>
+      <p>Atención nutricional profesional, cercana y adaptada a tu estilo de vida.</p>
+    </header>
+
+    <ul class="services" role="list">
+      {
+        services.map((service, i) => (
+          <li class:list={['card', `card--${tones[i % tones.length]}`]} id={`servicio-${service.id}`}>
+            <span class="card-icon">
+              <Icon name={service.icon} size={28} />
+            </span>
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+            <a
+              class="card-link"
+              href={whatsappLink(`Hola Karla, me interesa una consulta de: ${service.title}.`)}
+              target="_blank"
+              rel="noopener"
+            >
+              Agendar<span class="visually-hidden"> consulta de {service.title} (abre WhatsApp en una nueva pestaña)</span>
+              <Icon name="arrow" size={18} />
+            </a>
+          </li>
+        ))
+      }
+      <li class="card card--cta">
+        <h3>¿No sabes qué consulta necesitas?</h3>
+        <p>Cuéntame tu caso y te oriento sin compromiso para elegir la mejor opción.</p>
+        <a class="btn btn--primary" href={whatsappLink('Hola Karla, me gustaría orientación para elegir una consulta.')} target="_blank" rel="noopener">
+          <Icon name="whatsapp" />
+          Escríbeme<span class="visually-hidden"> (abre WhatsApp en una nueva pestaña)</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+
+  .card--cta {
+    justify-content: center;
+    gap: 0.25rem;
+    border: 0;
+    background: var(--teal-800);
+    color: var(--white);
+  }
+
+  .card--cta h3,
+  .card--cta p {
+    color: var(--white);
+  }
+
+  .card--cta .btn {
+    align-self: flex-start;
+    margin-top: 1.25rem;
+    background: var(--white);
+    color: var(--teal-800);
+  }
+
+  .card--cta .btn:hover {
+    background: var(--teal-50);
+    color: var(--teal-900);
+  }
+
+  .card--cta :focus-visible {
+    outline-color: var(--white);
+  }
+
+  .card-icon {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .card--teal .card-icon {
+    background: var(--teal-50);
+    color: var(--teal-800);
+  }
+
+  .card--rose .card-icon {
+    background: var(--rose-50);
+    color: var(--rose-700);
+  }
+
+  .card--lilac .card-icon {
+    background: var(--lilac-50);
+    color: var(--lilac-700);
+  }
+
+  h3 {
+    font-size: var(--step-1);
+  }
+
+  p {
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.7;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    font-weight: 600;
+    font-size: var(--step--1);
+    text-decoration: none;
+  }
+
+  .card-link :global(svg) {
+    transition: transform 0.2s ease;
+  }
+
+  .card-link:hover :global(svg) {
+    transform: translateX(4px);
+  }
+</style>

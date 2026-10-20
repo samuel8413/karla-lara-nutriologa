@@ -1,0 +1,96 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+import { site, contact, services } from '../data/site';
+import { withBase } from '../utils/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Rutas legales u otras que no deben indexarse. */
+  noindex?: boolean;
+}
+
+const { title = site.title, description = site.description, noindex = false } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(withBase('og-image.jpg'), Astro.site);
+
+// Datos estructurados para buscadores (negocio local de salud).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalBusiness',
+  '@id': `${new URL(withBase('/'), Astro.site)}#negocio`,
+  name: `${site.name} · Nutrióloga`,
+  description: site.description,
+  url: new URL(withBase('/'), Astro.site).href,
+  image: ogImage.href,
+  logo: new URL(withBase('icon-512.png'), Astro.site).href,
+  telephone: contact.phoneHref,
+  email: contact.email,
+  medicalSpecialty: 'DietNutrition',
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: contact.address.street,
+    addressLocality: contact.address.locality,
+    addressRegion: contact.address.region,
+    postalCode: contact.address.postalCode,
+    addressCountry: contact.address.country,
+  },
+  openingHours: contact.hours.map((h) => h.schema),
+  sameAs: contact.social.map((s) => s.url),
+  founder: {
+    '@type': 'Person',
+    name: site.fullName,
+    jobTitle: 'Nutrióloga',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios de nutrición',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.title, description: s.description },
+    })),
+  },
+};
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <Font cssVariable="--font-poppins" preload={[{ weight: 400 }, { weight: 600 }]} />
+
+    <meta name="theme-color" content="#eef4f4" />
+    <link rel="icon" href={withBase('favicon-32.png')} type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href={withBase('apple-touch-icon.png')} />
+    <link rel="manifest" href={withBase('manifest.webmanifest')} />
+    <link rel="sitemap" href={withBase('sitemap-index.xml')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:site_name" content={`${site.name} · Nutrióloga`} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Logotipo de Karla Lara, Nutrióloga: nutrición para la vida real" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+    <slot />
+  </body>
+</html>

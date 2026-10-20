@@ -1,0 +1,135 @@
+---
+import Icon from './Icon.astro';
+import { plans, whatsappLink } from '../data/site';
+---
+
+<section class="section section--tint-rose" id="precios" aria-labelledby="precios-title">
+  <div class="container">
+    <header class="section-header section-header--center">
+      <p class="eyebrow">Modalidades y precios</p>
+      <h2 id="precios-title">Elige la consulta que mejor se adapte a ti</h2>
+      <p>Precios en pesos mexicanos (MXN). Atención presencial en consultorio o en línea por videollamada.</p>
+    </header>
+
+    <ul class="plans" role="list">
+      {
+        plans.map((plan) => (
+          <li class:list={['plan', { 'plan--featured': plan.featured }]}>
+            {plan.featured && <p class="plan-tag">Recomendada para empezar</p>}
+            <h3>{plan.name}</h3>
+            <p class="plan-price">
+              <span class="amount">{plan.price}</span>
+              <span class="currency">MXN</span>
+            </p>
+            <p class="plan-duration">
+              <Icon name="clock" size={18} />
+              {plan.duration}
+            </p>
+            <ul class="plan-features" role="list">
+              {plan.features.map((feature) => (
+                <li>
+                  <Icon name="check" size={18} />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <a
+              class:list={['btn', 'btn--block', plan.featured ? 'btn--primary' : 'btn--secondary']}
+              href={whatsappLink(`Hola Karla, me gustaría agendar: ${plan.name}.`)}
+              target="_blank"
+              rel="noopener"
+            >
+              Agendar<span class="visually-hidden"> {plan.name} (abre WhatsApp en una nueva pestaña)</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 1.25rem;
+    align-items: start;
+    padding: 0;
+    list-style: none;
+  }
+
+  .plan {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+  }
+
+  .plan--featured {
+    border: 2px solid var(--teal-800);
+    box-shadow: var(--shadow);
+  }
+
+  .plan-tag {
+    align-self: flex-start;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: var(--teal-50);
+    color: var(--teal-800);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: var(--step-1);
+  }
+
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .amount {
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .currency,
+  .plan-duration {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .plan-duration {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .plan-features {
+    display: grid;
+    gap: 0.6rem;
+    margin-block: 0.75rem 1.25rem;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+    font-size: var(--step--1);
+  }
+
+  .plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .plan-features :global(svg) {
+    flex-shrink: 0;
+    margin-top: 0.2em;
+    color: var(--teal-700);
+  }
+</style>

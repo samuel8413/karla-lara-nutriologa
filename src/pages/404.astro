@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { withBase } from '../utils/url';
+---
+
+<Layout title="Página no encontrada · Karla Lara, Nutrióloga" noindex>
+  <Header home={false} />
+  <main id="contenido" tabindex="-1" class="section">
+    <div class="container not-found">
+      <p class="eyebrow">Error 404</p>
+      <h1>No encontramos esta página</h1>
+      <p>Es posible que el enlace haya cambiado o ya no exista.</p>
+      <a class="btn btn--primary" href={withBase('/')}>Volver al inicio</a>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .not-found {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    min-height: 50vh;
+    align-content: center;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: var(--step-4);
+  }
+
+  p:not(.eyebrow) {
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,26 @@
+{
+  "name": "karla-lara-nutriologa",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page de Karla Alexia Lara Baltazar, Nutrióloga",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/poppins": "^5.3.0",
+    "astro": "^7.4.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
+  }
+}

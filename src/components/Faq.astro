@@ -1,0 +1,91 @@
+---
+import { faqs } from '../data/site';
+---
+
+<section class="section section--tint-teal" id="preguntas" aria-labelledby="preguntas-title">
+  <div class="container faq-layout">
+    <header class="section-header">
+      <p class="eyebrow">Preguntas frecuentes</p>
+      <h2 id="preguntas-title">Resolvemos tus dudas</h2>
+      <p>Si no encuentras tu respuesta, escríbeme y con gusto te oriento.</p>
+    </header>
+
+    <div class="faq-list">
+      {
+        faqs.map((faq) => (
+          <details class="faq">
+            <summary>
+              <h3>{faq.question}</h3>
+            </summary>
+            <p>{faq.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-layout {
+    display: grid;
+    gap: 1rem 4rem;
+  }
+
+  @media (min-width: 62rem) {
+    .faq-layout {
+      grid-template-columns: 0.8fr 1.2fr;
+      align-items: start;
+    }
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .faq {
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.5rem;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--radius-sm);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '';
+    flex-shrink: 0;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-right: 2px solid var(--teal-800);
+    border-bottom: 2px solid var(--teal-800);
+    transform: translateY(-25%) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .faq[open] summary::after {
+    transform: translateY(25%) rotate(-135deg);
+  }
+
+  h3 {
+    font-size: var(--step-0);
+    font-weight: 600;
+  }
+
+  .faq p {
+    padding: 0 1.5rem 1.35rem;
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { contact, site } from '../data/site';
+
+// MOCK: texto de referencia. Debe ser revisado por un profesional legal conforme a la LFPDPPP.
+const updated = '18 de octubre de 2026';
+---
+
+<Layout
+  title="Aviso de privacidad · Karla Lara, Nutrióloga"
+  description="Aviso de privacidad para el tratamiento de datos personales de pacientes y prospectos."
+>
+  <Header home={false} />
+  <main id="contenido" tabindex="-1" class="section">
+    <article class="container legal">
+      <p class="eyebrow">Legal</p>
+      <h1>Aviso de privacidad</h1>
+      <p class="updated">Última actualización: {updated}</p>
+
+      <h2>Responsable</h2>
+      <p>
+        {site.fullName}, con domicilio en {contact.address.street}, {contact.address.locality}, es responsable del
+        tratamiento de los datos personales que nos proporciones.
+      </p>
+
+      <h2>Datos que recabamos</h2>
+      <p>
+        Nombre, teléfono, correo electrónico y, en el contexto de la consulta, datos de salud (considerados datos
+        sensibles) como historia clínica, hábitos de alimentación, medidas corporales y estudios de laboratorio.
+      </p>
+
+      <h2>Finalidades</h2>
+      <ul>
+        <li>Agendar y brindar la consulta nutricional.</li>
+        <li>Elaborar y dar seguimiento a tu plan de alimentación.</li>
+        <li>Contactarte para recordatorios de citas y seguimiento.</li>
+      </ul>
+
+      <h2>Formulario de contacto</h2>
+      <p>
+        Este sitio no almacena la información del formulario: al enviarlo se abre WhatsApp con el mensaje redactado,
+        y su tratamiento queda sujeto también a las políticas de dicho servicio.
+      </p>
+
+      <h2>Derechos ARCO</h2>
+      <p>
+        Puedes ejercer tus derechos de acceso, rectificación, cancelación y oposición, así como revocar tu
+        consentimiento, escribiendo a <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+      </p>
+
+      <h2>Cambios al aviso</h2>
+      <p>Cualquier modificación a este aviso de privacidad se publicará en esta misma página.</p>
+    </article>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .legal {
+    max-width: 46rem;
+  }
+
+  h1 {
+    font-size: var(--step-4);
+  }
+
+  .updated {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  h2 {
+    margin-top: 2.25rem;
+    font-size: var(--step-2);
+  }
+
+  p,
+  ul {
+    margin-top: 0.75rem;
+    color: var(--muted);
+  }
+
+  li + li {
+    margin-top: 0.4rem;
+  }
+</style>

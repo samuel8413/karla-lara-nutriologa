@@ -1,0 +1,63 @@
+---
+import { steps } from '../data/site';
+---
+
+<section class="section" id="proceso" aria-labelledby="proceso-title">
+  <div class="container">
+    <header class="section-header section-header--center">
+      <p class="eyebrow">Tu consulta</p>
+      <h2 id="proceso-title">¿Cómo trabajamos juntos?</h2>
+      <p>Un proceso claro, sin complicaciones, enfocado en resultados que se mantienen.</p>
+    </header>
+
+    <ol class="steps" role="list">
+      {
+        steps.map((step, i) => (
+          <li class="step">
+            <span class="step-number" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    position: relative;
+    padding: 1.75rem;
+    border-radius: var(--radius);
+    background: var(--teal-50);
+  }
+
+  .step-number {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--teal-700);
+  }
+
+  h3 {
+    font-size: var(--step-1);
+  }
+
+  p {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+</style>

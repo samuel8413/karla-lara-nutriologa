@@ -1,0 +1,320 @@
+---
+import Icon from './Icon.astro';
+import { contact, services, whatsappLink } from '../data/site';
+import { withBase } from '../utils/url';
+
+const { address } = contact;
+---
+
+<section class="section" id="contacto" aria-labelledby="contacto-title">
+  <div class="container">
+    <header class="section-header section-header--center">
+      <p class="eyebrow">Contacto</p>
+      <h2 id="contacto-title">Da el primer paso hacia una vida más saludable</h2>
+      <p>Cuéntame qué necesitas y te respondo a la brevedad para agendar tu cita.</p>
+    </header>
+
+    <div class="contact-grid">
+      <!-- Sin backend: el formulario abre WhatsApp con el mensaje redactado.
+           Sin JavaScript también funciona: el campo "text" se envía directamente a wa.me. -->
+      <form
+        class="contact-form"
+        id="contact-form"
+        action={`https://wa.me/${contact.whatsapp}`}
+        method="get"
+        target="_blank"
+        data-whatsapp={contact.whatsapp}
+      >
+        <div class="field">
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" name="nombre" type="text" autocomplete="name" required />
+        </div>
+
+        <div class="field">
+          <label for="servicio">Servicio de interés</label>
+          <select id="servicio" name="servicio">
+            <option value="">Selecciona una opción</option>
+            {services.map((s) => <option value={s.title}>{s.title}</option>)}
+          </select>
+        </div>
+
+        <fieldset class="field">
+          <legend>Modalidad</legend>
+          <div class="radios">
+            <label class="radio">
+              <input type="radio" name="modalidad" value="Presencial" checked />
+              Presencial
+            </label>
+            <label class="radio">
+              <input type="radio" name="modalidad" value="En línea" />
+              En línea
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="mensaje">Mensaje <span class="optional">(opcional)</span></label>
+          <textarea id="mensaje" name="text" rows="4" aria-describedby="mensaje-hint"></textarea>
+          <p class="hint" id="mensaje-hint">Por ejemplo: tus objetivos o el horario que prefieres.</p>
+        </div>
+
+        <button class="btn btn--primary btn--block" type="submit">
+          <Icon name="whatsapp" />
+          Enviar por WhatsApp
+        </button>
+        <p class="hint">
+          Se abrirá WhatsApp en una nueva pestaña con tu mensaje. Consulta el
+          <a href={withBase('aviso-de-privacidad/')}>aviso de privacidad</a>.
+        </p>
+        <p class="visually-hidden" role="status" id="form-status"></p>
+      </form>
+
+      <aside class="contact-info" aria-label="Datos de contacto">
+        <ul role="list">
+          <li>
+            <span class="info-icon"><Icon name="whatsapp" size={22} /></span>
+            <div>
+              <h3>WhatsApp</h3>
+              <a href={whatsappLink()} target="_blank" rel="noopener">
+                {contact.phoneDisplay}<span class="visually-hidden"> (abre WhatsApp en una nueva pestaña)</span>
+              </a>
+            </div>
+          </li>
+          <li>
+            <span class="info-icon"><Icon name="phone" size={22} /></span>
+            <div>
+              <h3>Teléfono</h3>
+              <a href={`tel:${contact.phoneHref}`}>{contact.phoneDisplay}</a>
+            </div>
+          </li>
+          <li>
+            <span class="info-icon"><Icon name="mail" size={22} /></span>
+            <div>
+              <h3>Correo</h3>
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            </div>
+          </li>
+          <li>
+            <span class="info-icon"><Icon name="pin" size={22} /></span>
+            <div>
+              <h3>Consultorio</h3>
+              <address>
+                {address.street}<br />
+                {address.locality}, {address.region}, C.P. {address.postalCode}
+              </address>
+              <a href={contact.mapsUrl} target="_blank" rel="noopener">
+                Ver en el mapa<span class="visually-hidden"> (abre en una nueva pestaña)</span>
+              </a>
+            </div>
+          </li>
+          <li>
+            <span class="info-icon"><Icon name="clock" size={22} /></span>
+            <div>
+              <h3>Horario</h3>
+              <dl class="hours">
+                {
+                  contact.hours.map((h) => (
+                    <div>
+                      <dt>{h.days}</dt>
+                      <dd>{h.time}</dd>
+                    </div>
+                  ))
+                }
+              </dl>
+            </div>
+          </li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 62rem) {
+    .contact-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: start;
+    }
+  }
+
+  .contact-form,
+  .contact-info {
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-radius: var(--radius-lg);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1.25rem;
+    border: 1px solid var(--line);
+    background: var(--white);
+    box-shadow: var(--shadow);
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  label,
+  legend {
+    font-weight: 500;
+    font-size: var(--step--1);
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: 0.4rem;
+  }
+
+  .optional,
+  .hint {
+    font-weight: 400;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  input[type='text'],
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #8a838f; /* 3.6:1 contra blanco (WCAG 1.4.11) */
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    font-size: 1rem; /* evita el zoom automático en iOS */
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input[type='text']:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: var(--focus);
+    outline-offset: 1px;
+    border-color: var(--rose-700);
+  }
+
+  input[type='text']:user-invalid {
+    border-color: #b42318;
+  }
+
+  .radios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .radio {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid #8a838f;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .radio:has(input:checked) {
+    border-color: var(--teal-800);
+    background: var(--teal-50);
+  }
+
+  .radio input {
+    width: 1.15rem;
+    height: 1.15rem;
+    accent-color: var(--teal-800);
+  }
+
+  .contact-info {
+    background: var(--teal-50);
+  }
+
+  .contact-info ul {
+    display: grid;
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact-info li {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .info-icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--teal-800);
+  }
+
+  h3 {
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .contact-info a {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .hours div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+  }
+
+  .hours dt::after {
+    content: ':';
+  }
+
+  .hours dd {
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('form-status');
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const get = (key: string) => String(data.get(key) ?? '').trim();
+
+    const lines = [
+      `Hola Karla, soy ${get('nombre')}.`,
+      get('servicio') && `Me interesa: ${get('servicio')}.`,
+      `Modalidad: ${get('modalidad')}.`,
+      get('text'),
+    ].filter(Boolean);
+
+    const url = `https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
+    window.open(url, '_blank', 'noopener');
+    if (status) status.textContent = 'Abrimos WhatsApp con tu mensaje en una nueva pestaña.';
+  });
+</script>

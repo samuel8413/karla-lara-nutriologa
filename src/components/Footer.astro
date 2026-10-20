@@ -1,0 +1,103 @@
+---
+import { Picture } from 'astro:assets';
+import logoWhite from '../assets/brand/logo-blanco.png';
+import Icon from './Icon.astro';
+import { contact, site } from '../data/site';
+import { withBase } from '../utils/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Picture src={logoWhite} alt={`${site.name}, Nutrióloga`} width={200} densities={[1, 2]} formats={['avif', 'webp']} />
+      <p>{site.role} · {site.license}</p>
+    </div>
+
+    <ul class="social" role="list" aria-label="Redes sociales">
+      {
+        contact.social.map((s) => (
+          <li>
+            <a href={s.url} target="_blank" rel="noopener">
+              <Icon name={s.name.toLowerCase() as 'instagram' | 'facebook'} />
+              <span class="visually-hidden">{s.name} (abre en una nueva pestaña)</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>© {year} {site.fullName}. Todos los derechos reservados.</p>
+    <a href={withBase('aviso-de-privacidad/')}>Aviso de privacidad</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: 3.5rem 6rem; /* espacio inferior para el botón flotante */
+    background: var(--teal-800);
+    color: var(--white);
+  }
+
+  .footer-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .footer-brand :global(img) {
+    width: 200px;
+    height: auto;
+  }
+
+  .footer-brand p {
+    margin-top: 1rem;
+    font-size: var(--step--1);
+  }
+
+  .social {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .social a {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid rgb(255 255 255 / 0.5);
+    border-radius: 50%;
+    color: var(--white);
+    transition: background-color 0.2s ease;
+  }
+
+  .social a:hover {
+    background: rgb(255 255 255 / 0.12);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgb(255 255 255 / 0.25);
+    font-size: var(--step--1);
+  }
+
+  .footer-bottom a {
+    color: var(--white);
+  }
+
+  .site-footer :focus-visible {
+    outline-color: var(--white);
+  }
+</style>

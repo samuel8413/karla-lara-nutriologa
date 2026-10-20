@@ -1,0 +1,195 @@
+---
+import { Picture } from 'astro:assets';
+import isotipo from '../assets/brand/isotipo.png';
+import Icon from './Icon.astro';
+import { site, whatsappLink } from '../data/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">{site.tagline}</p>
+      <h1 id="hero-title">Come bien, vive mejor. <span>sin dietas imposibles</span></h1>
+      <p class="lead">
+        Soy Karla Lara Baltazar, Licenciada en Nutrición. Te ayudo a mejorar tu salud con una alimentación personalizada para cada etapa de tu vida y el manejo de enfermedades.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn--primary" href={whatsappLink()} target="_blank" rel="noopener">
+          <Icon name="whatsapp" />
+          Agenda tu consulta<span class="visually-hidden"> (abre WhatsApp en una nueva pestaña)</span>
+        </a>
+        <a class="btn btn--secondary" href="#servicios">Conoce los servicios</a>
+      </div>
+      <ul class="hero-trust" aria-label="Por qué elegirme">
+        <li><Icon name="check" size={20} /> Planes personalizados</li>
+        <li><Icon name="check" size={20} /> Presencial y en línea</li>
+        <li><Icon name="check" size={20} /> Basado en evidencia</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-art">
+        <Picture
+          src={isotipo}
+          alt=""
+          widths={[240, 360, 480, 640]}
+          sizes="(min-width: 30rem) 292px, 62vw"
+          formats={['avif', 'webp']}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="badge badge--top">
+        <span class="badge-icon"><Icon name="clipboard" size={20} /></span>
+        Plan hecho para ti
+      </div>
+      <div class="badge badge--bottom">
+        <span class="badge-icon badge-icon--rose"><Icon name="video" size={20} /></span>
+        Consulta en línea
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3rem, 2rem + 5vw, 6rem);
+    background:
+      radial-gradient(60rem 30rem at 100% 0%, var(--rose-50), transparent 70%),
+      radial-gradient(50rem 30rem at 0% 100%, var(--teal-50), transparent 70%);
+  }
+
+  .hero-grid {
+    display: grid;
+    gap: clamp(2.5rem, 2rem + 3vw, 4rem);
+    align-items: center;
+  }
+
+  @media (min-width: 62rem) {
+    .hero-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    letter-spacing: -0.01em;
+  }
+
+  h1 span {
+    color: var(--teal-800);
+  }
+
+  .lead {
+    max-width: 36rem;
+    margin-top: 1.25rem;
+    font-size: var(--step-1);
+    color: var(--muted);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+    margin-top: 2rem;
+  }
+
+  .hero-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none;
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .hero-trust li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .hero-trust :global(svg) {
+    color: var(--teal-700);
+  }
+
+  .hero-visual {
+    position: relative;
+    justify-self: center;
+    width: min(100%, 26rem);
+  }
+
+  .hero-art {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
+    background:
+      radial-gradient(circle at 25% 20%, rgb(193 183 194 / 0.35), transparent 55%),
+      radial-gradient(circle at 80% 85%, rgb(200 161 164 / 0.3), transparent 50%),
+      linear-gradient(160deg, var(--white), var(--teal-50));
+    box-shadow: inset 0 0 0 1px rgb(143 174 177 / 0.2);
+  }
+
+  .hero-art :global(picture) {
+    width: 70%;
+  }
+
+  .hero-art :global(img) {
+    width: 100%;
+  }
+
+  .badge {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem 0.6rem 0.6rem;
+    border-radius: 999px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    font-size: var(--step--1);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .badge--top {
+    top: 8%;
+    left: -4%;
+  }
+
+  .badge--bottom {
+    right: -4%;
+    bottom: 10%;
+  }
+
+  .badge-icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--teal-50);
+    color: var(--teal-800);
+  }
+
+  .badge-icon--rose {
+    background: var(--rose-50);
+    color: var(--rose-700);
+  }
+
+  @media (max-width: 30rem) {
+    .badge--top {
+      left: 0;
+    }
+
+    .badge--bottom {
+      right: 0;
+    }
+  }
+</style>

@@ -1,0 +1,223 @@
+---
+import { Picture } from 'astro:assets';
+import logo from '../assets/brand/logo-principal.png';
+import Icon from './Icon.astro';
+import { whatsappLink } from '../data/site';
+import { withBase } from '../utils/url';
+
+interface Props {
+  /** En páginas secundarias los enlaces apuntan a las secciones de la portada. */
+  home?: boolean;
+}
+
+const { home = true } = Astro.props;
+const prefix = home ? '' : withBase('/');
+
+const links = [
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#sobre-mi', label: 'Sobre mí' },
+  { href: '#proceso', label: 'Tu consulta' },
+  { href: '#precios', label: 'Precios' },
+  { href: '#preguntas', label: 'Preguntas' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={withBase('/')}>
+      <Picture
+        src={logo}
+        alt="Karla Lara, Nutrióloga — Inicio"
+        width={160}
+        densities={[1, 2]}
+        formats={['avif', 'webp']}
+        loading="eager"
+      />
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+      <Icon name="menu" class="icon-open" />
+      <Icon name="close" class="icon-close" />
+      <span class="visually-hidden">Menú</span>
+    </button>
+
+    <nav class="nav" id="menu-principal" aria-label="Principal">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={`${prefix}${link.href}`}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn btn--primary nav-cta" href={whatsappLink()} target="_blank" rel="noopener">
+        Agendar cita<span class="visually-hidden"> (abre WhatsApp en una nueva pestaña)</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(255 255 255 / 0.96);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: var(--header-h);
+  }
+
+  .brand {
+    display: block;
+    flex-shrink: 0;
+    padding-block: 0.5rem;
+  }
+
+  .brand :global(img) {
+    width: 160px;
+    height: auto;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav ul a {
+    display: inline-block;
+    padding-block: 0.5rem;
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    background: linear-gradient(var(--brand-rose), var(--brand-rose)) no-repeat left bottom / 0 2px;
+    transition: background-size 0.25s ease;
+  }
+
+  .nav ul a:hover {
+    color: var(--teal-800);
+    background-size: 100% 2px;
+  }
+
+  .nav-cta {
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    font-size: var(--step--1);
+  }
+
+  .nav-toggle {
+    display: none;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .nav-toggle :global(.icon-close),
+  .nav-toggle[aria-expanded='true'] :global(.icon-open) {
+    display: none;
+  }
+
+  .nav-toggle[aria-expanded='true'] :global(.icon-close) {
+    display: block;
+  }
+
+  @media (max-width: 62rem) {
+    /* Sin JavaScript el menú se muestra completo debajo del logo. */
+    .header-inner {
+      flex-wrap: wrap;
+    }
+
+    :global(html:not(.js)) .nav {
+      flex-wrap: wrap;
+      padding-bottom: 1rem;
+    }
+
+    :global(.js) .nav-toggle {
+      display: grid;
+    }
+
+    :global(.js) .nav {
+      position: absolute;
+      top: 100%;
+      inset-inline: 0;
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      padding: 1rem var(--gutter) 1.5rem;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    :global(.js) .nav[data-open] {
+      display: flex;
+    }
+
+    :global(.js) .nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    :global(.js) .nav ul a {
+      display: block;
+      padding-block: 0.85rem;
+      font-size: var(--step-0);
+      border-bottom: 1px solid var(--line);
+      background: none;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const nav = document.getElementById('menu-principal');
+
+  if (toggle && nav) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      nav.toggleAttribute('data-open', open);
+    };
+
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+
+    nav.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.hasAttribute('data-open')) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    matchMedia('(min-width: 62.0625rem)').addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>
